@@ -17,18 +17,12 @@ interface MapProps {
 const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapToken, setMapToken] = useState<string>("");
-
-  // Note: In a production app, you would use an environment variable for this token
-  // This is just for demonstration purposes
-  useEffect(() => {
-    setMapToken("pk.YOUR_MAPBOX_PUBLIC_TOKEN");
-  }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || !mapToken) return;
+    if (!mapContainer.current) return;
 
-    mapboxgl.accessToken = mapToken;
+    // Use the provided Mapbox public token
+    mapboxgl.accessToken = "pk.eyJ1IjoibGZtYXBib3giLCJhIjoiY2wwcTRoZjQzMjY0bTNqcDdqbjlqNmFociJ9.Q8jPUrCDqxkQ2ZYNp70LxQ";
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -67,30 +61,7 @@ const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProp
     return () => {
       map.current?.remove();
     };
-  }, [centerLocation, markers, mapToken]);
-
-  // If no token is set, show a message
-  if (!mapToken || mapToken.includes("YOUR_MAPBOX_PUBLIC_TOKEN")) {
-    return (
-      <div className="relative rounded-lg overflow-hidden bg-gray-100 min-h-[400px] flex items-center justify-center">
-        <div className="text-center p-6">
-          <h3 className="font-bold text-lg text-gray-800 mb-2">Map Placeholder</h3>
-          <p className="text-gray-600 mb-2">
-            Please add your Mapbox token to view the interactive map.<br />
-            In a production environment, this would be securely configured.
-          </p>
-          <div className="text-sm bg-white p-4 rounded-md max-w-md mx-auto text-left">
-            <p className="font-semibold mb-1">To configure the map:</p>
-            <ol className="list-decimal list-inside space-y-1">
-              <li>Create a Mapbox account at <a href="https://mapbox.com" className="text-[#6941C6] underline">mapbox.com</a></li>
-              <li>Get your public access token from the Mapbox dashboard</li>
-              <li>Replace "pk.YOUR_MAPBOX_PUBLIC_TOKEN" in the Map.tsx component</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [centerLocation, markers]);
 
   return (
     <div className="relative rounded-lg overflow-hidden shadow-md">
