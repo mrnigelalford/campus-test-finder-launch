@@ -1,7 +1,8 @@
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { Star, MapPin } from "lucide-react";
 
 interface MapProps {
   centerLocation?: [number, number]; // [longitude, latitude]
@@ -14,7 +15,7 @@ interface MapProps {
   }>;
 }
 
-const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProps) => {
+const Map = ({ centerLocation = [-84.5819, 34.0378], markers = [] }: MapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
@@ -37,14 +38,31 @@ const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProp
       "top-right"
     );
 
+    // Add KSU marker (star)
+    const ksuEl = document.createElement("div");
+    ksuEl.innerHTML = Star({
+      size: 32,
+      color: "#6941C6",
+      fill: "#6941C6"
+    }).outerHTML;
+    
+    const ksuPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+      `<h3 class="font-bold">Kennesaw State University</h3>
+       <p>1000 Chastain Road, Kennesaw, GA 30144</p>`
+    );
+
+    new mapboxgl.Marker({ element: ksuEl })
+      .setLngLat(centerLocation)
+      .setPopup(ksuPopup)
+      .addTo(map.current);
+
     // Create markers for lab locations
     markers.forEach((marker) => {
       const el = document.createElement("div");
-      el.className = "marker";
-      el.style.backgroundImage = "url('/marker.png')";
-      el.style.width = "32px";
-      el.style.height = "32px";
-      el.style.backgroundSize = "100%";
+      el.innerHTML = MapPin({
+        size: 32,
+        color: "#6941C6"
+      }).outerHTML;
       
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
         `<h3 class="font-bold">${marker.title}</h3>
@@ -52,7 +70,7 @@ const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProp
          ${marker.distance ? `<p class="text-sm text-gray-500">${marker.distance} miles away</p>` : ''}`
       );
 
-      new mapboxgl.Marker(el)
+      new mapboxgl.Marker({ element: el })
         .setLngLat(marker.coordinates)
         .setPopup(popup)
         .addTo(map.current);
@@ -71,3 +89,4 @@ const Map = ({ centerLocation = [-75.165222, 39.952583], markers = [] }: MapProp
 };
 
 export default Map;
+
