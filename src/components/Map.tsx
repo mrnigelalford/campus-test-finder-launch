@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Star, MapPin } from "lucide-react";
+import { createElement } from "react";
+import ReactDOMServer from "react-dom/server";
 
 interface MapProps {
   centerLocation?: [number, number]; // [longitude, latitude]
@@ -40,11 +42,13 @@ const Map = ({ centerLocation = [-84.5819, 34.0378], markers = [] }: MapProps) =
 
     // Add KSU marker (star)
     const ksuEl = document.createElement("div");
-    ksuEl.innerHTML = Star({
-      size: 32,
-      color: "#6941C6",
-      fill: "#6941C6"
-    }).outerHTML;
+    ksuEl.innerHTML = ReactDOMServer.renderToString(
+      createElement(Star, {
+        size: 32,
+        color: "#6941C6",
+        fill: "#6941C6"
+      })
+    );
     
     const ksuPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
       `<h3 class="font-bold">Kennesaw State University</h3>
@@ -59,10 +63,12 @@ const Map = ({ centerLocation = [-84.5819, 34.0378], markers = [] }: MapProps) =
     // Create markers for lab locations
     markers.forEach((marker) => {
       const el = document.createElement("div");
-      el.innerHTML = MapPin({
-        size: 32,
-        color: "#6941C6"
-      }).outerHTML;
+      el.innerHTML = ReactDOMServer.renderToString(
+        createElement(MapPin, {
+          size: 32,
+          color: "#6941C6"
+        })
+      );
       
       const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
         `<h3 class="font-bold">${marker.title}</h3>
@@ -89,4 +95,3 @@ const Map = ({ centerLocation = [-84.5819, 34.0378], markers = [] }: MapProps) =
 };
 
 export default Map;
-
