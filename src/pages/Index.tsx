@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
@@ -10,7 +9,7 @@ import Footer from "../components/Footer";
 
 const Index = () => {
   // You can replace these with actual data from an API
-  const [collegeName] = useState("Stanford University");
+  const [collegeName] = useState("Kennesaw State University");
   const [searchedTest, setSearchedTest] = useState("");
   const [searchedLocation, setSearchedLocation] = useState("");
   const [selectedFacilityId, setSelectedFacilityId] = useState<string | null>(null);
@@ -20,33 +19,33 @@ const Index = () => {
     {
       id: "lab1",
       name: "LabCorp",
-      location: "Palo Alto",
-      address: "701 Welch Rd, Palo Alto, CA 94304",
-      distance: "0.8",
+      location: "Kennesaw",
+      address: "3805 Cherokee St NW, Kennesaw, GA 30144",
+      distance: "1.2",
       rating: 4.7,
-      coordinates: [-122.173801, 37.441883] as [number, number],
+      coordinates: [-84.5857, 34.0234] as [number, number],
       acceptsInsurance: true,
       quickestTurnaround: "24 hours"
     },
     {
       id: "lab2",
       name: "Quest Diagnostics",
-      location: "Stanford",
-      address: "900 Blake Wilbur Dr, Stanford, CA 94305",
-      distance: "1.2",
+      location: "Kennesaw",
+      address: "3950 Austell Rd, Austell, GA 30106",
+      distance: "2.5",
       rating: 4.5,
-      coordinates: [-122.175235, 37.437579] as [number, number],
+      coordinates: [-84.5937, 34.0268] as [number, number],
       acceptsInsurance: true,
       quickestTurnaround: "48 hours"
     },
     {
       id: "lab3",
-      name: "Stanford Health Care",
-      location: "Stanford",
-      address: "300 Pasteur Dr, Stanford, CA 94305",
-      distance: "1.5",
+      name: "KSU Health Clinic",
+      location: "Kennesaw",
+      address: "3215 Campus Loop Rd, Kennesaw, GA 30144",
+      distance: "0.2",
       rating: 4.8,
-      coordinates: [-122.175835, 37.433981] as [number, number],
+      coordinates: [-84.5819, 34.0378] as [number, number],
       acceptsInsurance: true,
       quickestTurnaround: "24 hours"
     }
@@ -66,11 +65,11 @@ const Index = () => {
   const faqs = [
     {
       question: "How do I find a testing location near campus?",
-      answer: "Use the search box at the top of the page to enter your test type and location. You can also explore the map to see all available testing facilities near Stanford University."
+      answer: "Use the search box at the top of the page to enter your test type and location. You can also explore the map to see all available testing facilities near Kennesaw State University."
     },
     {
       question: "Does my student health insurance cover these tests?",
-      answer: "Most student health insurance plans cover diagnostic testing. You can verify coverage when booking your appointment. Many of our partner facilities accept Stanford's student health insurance."
+      answer: "Most student health insurance plans cover diagnostic testing. You can verify coverage when booking your appointment. Many of our partner facilities accept Kennesaw State University's student health insurance."
     },
     {
       question: "How long does it take to get test results?",
@@ -82,7 +81,7 @@ const Index = () => {
     },
     {
       question: "Can I use the campus health center for testing?",
-      answer: "Yes, the Stanford Health Center offers some testing services. However, LabFinder provides access to a wider range of tests and facilities both on and off campus."
+      answer: "Yes, the KSU Health Center offers some testing services. However, LabFinder provides access to a wider range of tests and facilities both on and off campus."
     },
     {
       question: "How do I prepare for my test?",
@@ -90,13 +89,8 @@ const Index = () => {
     }
   ];
 
-  // Calculate map center from facilities
-  const mapCenter: [number, number] = facilities.length > 0 
-    ? [
-        facilities.reduce((sum, f) => sum + f.coordinates[0], 0) / facilities.length,
-        facilities.reduce((sum, f) => sum + f.coordinates[1], 0) / facilities.length
-      ]
-    : [-122.1752, 37.4374]; // Stanford's coordinates as default
+  // Calculate map center for Kennesaw, GA
+  const mapCenter: [number, number] = [-84.5819, 34.0378]; // Kennesaw State University coordinates
 
   const mapMarkers = facilities.map(f => ({
     id: f.id,
@@ -108,7 +102,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header collegeName={collegeName} />
+      <Header 
+        collegeName={collegeName} 
+        collegeLogo="https://www.kennesaw.edu/stratcomm/branding/images/university-logo-2.png"
+      />
       
       <main>
         <Hero 
@@ -123,7 +120,7 @@ const Index = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               {searchedTest || searchedLocation 
                 ? `${searchedTest ? searchedTest + " " : ""}${searchedLocation ? "near " + searchedLocation : ""}` 
-                : "Testing Facilities Near Stanford University"}
+                : "Testing Facilities Near Kennesaw State University"}
             </h2>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
