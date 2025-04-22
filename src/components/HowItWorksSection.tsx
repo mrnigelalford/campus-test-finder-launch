@@ -1,46 +1,43 @@
 
-import { Check, MapPin, FileText } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-const howItWorks = [
+const steps = [
   {
-    icon: <Check size={48} className="mx-auto text-[#6941C6]" />,
-    title: "Select Test",
-    description: "Choose one of 1,200 lab & radiology tests available"
+    number: 1,
+    title: "Search by Test",
+    description: "Find your required medical test by typing the test name and location."
   },
   {
-    icon: <MapPin size={48} className="mx-auto text-[#6941C6]" />,
-    title: "Get Tested",
-    description: "Enter your zip code and choose a lab or radiology center near you"
+    number: 2,
+    title: "Choose Facility",
+    description: "Browse results and choose a location based on distance, rating, and turnaround time."
   },
   {
-    icon: <FileText size={48} className="mx-auto text-[#6941C6]" />,
-    title: "View Results",
-    description: "Review your health information anytime, anywhere"
+    number: 3,
+    title: "Book & Get Tested",
+    description: "Book your appointment online and get tested at your chosen facility."
   }
 ];
 
 const HowItWorksSection = () => (
-  <section
-    id="how-it-works"
-    className="w-full py-20 bg-[#fcfbff] flex flex-col items-center"
-  >
-    <h3 className="text-lg font-semibold text-[#6941C6] text-center mb-2">
-      How it works
-    </h3>
-    <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-10 text-center">
-      Living healthy starts here
-    </h2>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
-      {howItWorks.map((step, i) => (
-        <div className="flex flex-col items-center text-center px-4" key={step.title}>
-          <div className="flex items-center justify-center mb-4">{step.icon}</div>
-          <h4 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h4>
-          <p className="text-gray-700 text-base">{step.description}</p>
-          {i < 2 && (
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-24 bg-gray-200" />
-          )}
-        </div>
-      ))}
+  <section id="how-it-works" className="py-16 bg-gradient-to-r from-[#F9F5FF] to-[#EBE4FF] rounded-xl">
+    <div className="container mx-auto px-4">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">How It Works</h2>
+      <p className="text-lg text-gray-600 mb-12 max-w-2xl">
+        LabFinder makes it easy to find and book medical testing near your campus. Just follow these three simple steps:
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        {steps.map(step => (
+          <div key={step.number} className="bg-white rounded-xl shadow p-8 flex flex-col items-center relative">
+            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-[#6941C6] text-white text-2xl font-bold mb-4">{step.number}</div>
+            <h3 className="font-semibold text-lg mb-2 text-gray-800">{step.title}</h3>
+            <p className="text-gray-600 text-center">{step.description}</p>
+            {step.number !== 3 && (
+              <ArrowRight className="absolute right-[-36px] top-1/2 transform -translate-y-1/2 hidden md:block text-[#6941C6]" size={32} />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 );

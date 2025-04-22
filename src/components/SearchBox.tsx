@@ -1,4 +1,3 @@
-
 import { Search, MapPin, Navigation } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -22,6 +21,18 @@ const sampleSearchData = [
   "Thyroid Panel",
   "Vitamin D Test"
 ];
+
+// BOOKING PORTAL URL BUILDER
+function buildBookingUrl(examId: number, zipcode: string) {
+  // Always today's date in yyyy-mm-dd
+  const date = new Date();
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+  // Insurance 832 is fallback
+  return `https://portal.labfinder.com/booking-widget/search-results?date=${todayStr}&page=1&exam=${examId}&insurance=832&location=${zipcode}`;
+}
 
 const SearchBox = ({ onSearch }: SearchBoxProps) => {
   const [test, setTest] = useState("");
@@ -131,6 +142,16 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
     setSuggestions([]);
   };
 
+  // Slightly improve ZIP extraction when building the URL. Use a simple regex.
+  const getZipFromLocation = () => {
+    const zipMatch = location.match(/\b\d{5}\b/);
+    return zipMatch ? zipMatch[0] : location;
+  };
+
+  const examId = 61718; // fallback, as requested
+
+  const bookingUrl = buildBookingUrl(examId, getZipFromLocation());
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Book an appointment</h2>
@@ -191,6 +212,20 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
           Find Available Tests
         </Button>
       </form>
+      {/* Demo: Show the constructed booking URL for dev/demo purposes only */}
+      {location && (
+        <div className="mt-6">
+          <span className="block font-medium mb-2 text-gray-700">Sample Booking URL (for dev):</span>
+          <a
+            href={bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#6941C6] underline break-all"
+          >
+            {bookingUrl}
+          </a>
+        </div>
+      )}
     </div>
   );
 };
