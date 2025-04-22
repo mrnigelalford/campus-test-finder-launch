@@ -9,6 +9,20 @@ interface SearchBoxProps {
   onSearch: (test: string, location: string) => void;
 }
 
+// Sample data to use when OpenSearch API fails due to CORS
+const sampleSearchData = [
+  "TB Test (Quantiferon-TB Gold)",
+  "Complete Blood Count (CBC)",
+  "COVID-19 PCR Test",
+  "Lipid Panel",
+  "Comprehensive Metabolic Panel",
+  "Hemoglobin A1C",
+  "Urinalysis",
+  "STD Panel",
+  "Thyroid Panel",
+  "Vitamin D Test"
+];
+
 const SearchBox = ({ onSearch }: SearchBoxProps) => {
   const [test, setTest] = useState("");
   const [location, setLocation] = useState("");
@@ -65,7 +79,7 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
     );
   };
 
-  // Fetch suggestions from OpenSearch
+  // Fetch suggestions from OpenSearch or fall back to sample data
   const handleTestInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTest(e.target.value);
     if (e.target.value.length < 2) {
@@ -73,6 +87,7 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
       return;
     }
 
+    // Try to fetch from OpenSearch
     fetch("https://at9b61vgf2wp1awumucd.us-east-1.aoss.amazonaws.com/exams/_search", {
       method: "POST",
       headers: {
@@ -89,13 +104,25 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
         size: 5
       })
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("OpenSearch request failed");
+        }
+        return res.json();
+      })
       .then(data => {
         const hits = data?.hits?.hits || [];
         setSuggestions(hits.map((hit: any) => hit._source?.label || hit._source?.post_title || ""));
       })
       .catch(() => {
-        setSuggestions([]);
+        // Fall back to sample data filtered by the search input
+        const filteredSuggestions = sampleSearchData.filter(
+          item => item.toLowerCase().includes(e.target.value.toLowerCase())
+        ).slice(0, 5);
+        
+        setSuggestions(filteredSuggestions);
+        
+        console.log("Using fallback search data due to CORS or API error");
       });
   };
 
