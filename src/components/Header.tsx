@@ -15,6 +15,7 @@ const Header = ({ collegeName, collegeLogo }: HeaderProps) => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Prefer anchor navigation for how it works + FAQ
   return (
     <header className="bg-white border-b border-gray-200 py-4">
       <div className="container mx-auto px-4">
@@ -28,7 +29,9 @@ const Header = ({ collegeName, collegeLogo }: HeaderProps) => {
               />
             </Link>
             <span className="text-gray-400 px-3 hidden md:inline">|</span>
-            <span className="text-gray-600 hidden md:inline">Preferred Solution of</span>
+            <span className="text-gray-600 hidden md:inline">
+              Preferred Solution of
+            </span>
             <img 
               src="https://www.kennesaw.edu/stratcomm/branding/images/university-logo-2.png" 
               alt="Kennesaw State University Logo" 
@@ -66,13 +69,20 @@ const Header = ({ collegeName, collegeLogo }: HeaderProps) => {
             </div>
 
             <div className="flex flex-col md:flex-row items-center gap-4 px-4 md:px-0">
-              <Link 
-                to="#" 
+              <a 
+                href="#how-it-works"
                 className="text-[#6941C6] hover:text-[#5731b3] font-medium w-full md:w-auto text-center py-2 md:py-0"
                 onClick={toggleMobileMenu}
               >
                 How it works
-              </Link>
+              </a>
+              <a 
+                href="#faq"
+                className="text-[#6941C6] hover:text-[#5731b3] font-medium w-full md:w-auto text-center py-2 md:py-0"
+                onClick={toggleMobileMenu}
+              >
+                FAQ
+              </a>
               <Link 
                 to="#" 
                 className="bg-[#6941C6] hover:bg-[#5731b3] text-white px-4 py-2 rounded-md font-medium transition-colors w-full md:w-auto text-center"

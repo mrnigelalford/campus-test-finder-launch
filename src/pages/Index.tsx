@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
@@ -6,6 +7,7 @@ import Map from "../components/Map";
 import TestingFacility from "../components/TestingFacility";
 import FAQSection from "../components/FAQSection";
 import Footer from "../components/Footer";
+import HowItWorksSection from "../components/HowItWorksSection";
 
 const Index = () => {
   // You can replace these with actual data from an API
@@ -106,16 +108,18 @@ const Index = () => {
         collegeName={collegeName} 
         collegeLogo="https://www.kennesaw.edu/stratcomm/branding/images/university-logo-2.png"
       />
-      
+
       <main>
         <Hero 
           collegeName={collegeName} 
           onSearch={handleSearch} 
         />
-        
+
+        <HowItWorksSection />
+
         <div className="container mx-auto px-4 py-12">
           <TestTypes onSelectTest={handleSelectTest} />
-          
+
           <div className="my-16">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
               {searchedTest || searchedLocation 
@@ -150,7 +154,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="my-16">
+          <div className="my-16" id="faq">
             <FAQSection faqs={faqs} />
           </div>
         </div>

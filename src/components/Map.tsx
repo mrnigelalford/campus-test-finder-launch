@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Star, MapPin } from "lucide-react";
+import { Check, MapPin } from "lucide-react";
 import { createElement } from "react";
 import ReactDOMServer from "react-dom/server";
 
@@ -40,10 +40,10 @@ const Map = ({ centerLocation = [-84.5819, 34.0378], markers = [] }: MapProps) =
       "top-right"
     );
 
-    // Add KSU marker (star)
+    // Add KSU marker (using Check as a star substitute)
     const ksuEl = document.createElement("div");
     ksuEl.innerHTML = ReactDOMServer.renderToString(
-      createElement(Star, {
+      createElement(Check, {
         size: 32,
         color: "#6941C6",
         fill: "#6941C6"

@@ -13,6 +13,8 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
   const [test, setTest] = useState("");
   const [location, setLocation] = useState("");
   const [isLocating, setIsLocating] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +65,45 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
     );
   };
 
+  // Fetch suggestions from OpenSearch
+  const handleTestInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTest(e.target.value);
+    if (e.target.value.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    fetch("https://at9b61vgf2wp1awumucd.us-east-1.aoss.amazonaws.com/exams/_search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: {
+          multi_match: {
+            query: e.target.value,
+            fields: ["label", "post_title", "examslug"],
+            fuzziness: "auto"
+          }
+        },
+        size: 5
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        const hits = data?.hits?.hits || [];
+        setSuggestions(hits.map((hit: any) => hit._source?.label || hit._source?.post_title || ""));
+      })
+      .catch(() => {
+        setSuggestions([]);
+      });
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setTest(suggestion);
+    setSuggestions([]);
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Book an appointment</h2>
@@ -74,8 +115,24 @@ const SearchBox = ({ onSearch }: SearchBoxProps) => {
             placeholder="Search by test name (e.g. COVID-19, Blood test)"
             className="pl-10 py-6"
             value={test}
-            onChange={(e) => setTest(e.target.value)}
+            onChange={handleTestInput}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setTimeout(() => setSearchFocused(false), 100)} // slight delay for suggestion click
+            autoComplete="off"
           />
+          {searchFocused && suggestions.length > 0 && (
+            <ul className="absolute left-0 mt-2 w-full bg-white border border-gray-200 rounded shadow z-10 max-h-48 overflow-auto">
+              {suggestions.map((s, idx) => (
+                <li 
+                  key={s + idx} 
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+                  onMouseDown={() => handleSuggestionClick(s)}
+                >
+                  {s}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         
         <div className="relative">
