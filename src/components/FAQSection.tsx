@@ -41,7 +41,7 @@ const FAQSection = ({ faqs }: FAQSectionProps) => {
             </button>
             
             {openIndex === index && (
-              <div className="p-4 bg-gray-50 border-t border-gray-200">
+              <div className="p-4 bg-white border-t border-gray-200">
                 <p className="text-gray-700">{faq.answer}</p>
               </div>
             )}
